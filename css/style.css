@@ -1,0 +1,93 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: whitesmoke;
+    font-family: "Poppins", sans-serif;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+}
+
+
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 1.5rem;
+    box-shadow: 1px 1px 5px rgba(97, 31, 110, 0.541);
+    font-size: 13px;
+    font-weight: bold;
+    color: purple;
+    margin-bottom: 1rem;
+    position: fixed;
+    width: 100%;
+    background-color: white;
+}
+
+.logo img{
+    width: 80px;
+}
+
+.floater{
+    display: absolute;
+    margin-left: 80%;
+    margin-top: 70vh;
+    position: fixed;
+}
+
+.floater img{
+    width: 60px;
+}
+
+.content{
+    max-width: 760px;
+    width: 100%;
+    margin: auto;
+}
+
+.tabs{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tab{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tab img{
+    max-width: 760px;
+    width: 100%;
+    margin: auto;
+}
+
+.tab .text{
+ 
+    background-color: whitesmoke;
+    max-width: 750px;
+    width: 100%;
+    border-bottom-left-radius: 1.5rem;
+    box-shadow: 1px 2px 3px rgba(47, 29, 49, 0.438);
+    margin-bottom: 10px;
+    margin-top: -10px;
+}
+
+.tab .name{
+    margin-left: 2rem;
+    font-size: 12px;
+    padding: 10px 0px;
+ 
+}
+
+.tab .price{
+    margin-left: 2rem;
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}

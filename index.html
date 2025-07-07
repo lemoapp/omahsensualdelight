@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>Omah's Sensual Delight</title>
+</head>
+<body>
+    <nav>
+        <div class="logo"><img src="./images/Frame 155.png" alt=""></div>
+        <a href="cart.html" style="color: black; margin-left: -4rem;">🛒 <span id="cart-count" style="color: black; margin-left: -4rem;">0</span></a>
+    </nav><br><br><br><br><br><br>
+    <div class="floater">
+        <img src="./images/whatsapp.png" alt="">
+        
+    </div>
+    <div class="tabs">
+       <div class="tabs" id="product-container"></div>
+
+    </div>
+
+
+
+<script>
+  const products = [
+    {
+      name: "30 Function Rabbit Dildo Vibrator Sex Toy",
+      price: 16000,
+      image: "./images/Frame 127.png"
+    },
+    {
+      name: "Thin Magic Wand Vibrator Sex Toy For Women",
+      price: 12000,
+      image: "./images/Frame 128.png"
+    },
+    {
+      name: "Soft Beige 8 Inches Penis Dildo",
+      price: 29500,
+      image: "./images/Frame 129.png"
+    },
+    {
+      name: "Rechargeable Strong Bullet Women Sex Toy",
+      price: 18000,
+      image: "./images/Frame 131.png"
+    },
+    {
+      name: "Vagina And Anal Big Butty Male Masturbator",
+      price: 50000,
+      image: "./images/Frame 132.png"
+    },
+    {
+      name: "Realistic 8 Inches Penis Dildo",
+      price: 35000,
+      image: "./images/Frame 133.png"
+    }
+    // Add more products here like above
+  ];
+
+  // Shuffle products array
+  function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
+
+  // Render products to DOM
+  function displayProducts() {
+    const container = document.getElementById("product-container");
+    container.innerHTML = "";
+
+    const shuffled = shuffleArray(products);
+    shuffled.forEach(product => {
+      const tab = document.createElement("div");
+      tab.className = "tab";
+      tab.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <div class="text">
+          <div class="name">${product.name}</div>
+          <div class="price">₦ ${product.price.toLocaleString()}</div>
+          <button onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+        </div>
+      `;
+      container.appendChild(tab);
+    });
+  }
+
+  function addToCart(product) {
+  // Retrieve existing cart from localStorage or initialize
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Check if product already exists
+  const existingIndex = cart.findIndex(item => item.name === product.name);
+
+  if (existingIndex !== -1) {
+    // If already exists, increase quantity
+    cart[existingIndex].quantity += 1;
+  } else {
+    // If not in cart, add with quantity 1
+    cart.push({ ...product, quantity: 1 });
+  }
+
+  // Save updated cart
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  // Feedback
+  alert(`"${product.name}" added to cart.`);
+}
+
+
+  // Initial display
+  displayProducts();
+
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cartCountElem = document.getElementById("cart-count");
+  if (cartCountElem) cartCountElem.innerText = count;
+}
+
+// Call this on page load and after adding to cart
+updateCartCount();
+
+</script>
+
+</body>
+</html>

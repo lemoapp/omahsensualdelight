@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+
+    .checkout-container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      color: #1E88E5;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .user-details, .cart-summary {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .detail-item {
+      margin-bottom: 10px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .cart-item span {
+      display: inline-block;
+    }
+
+    .total {
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: right;
+      font-size: 18px;
+    }
+
+    button {
+      background-color: #1E88E5;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: block;
+      margin: 30px auto 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- ... (Same head and styles as before) -->
+<body>
+  <div class="checkout-container">
+    <h2>Checkout</h2>
+
+    <div class="section user-details">
+      <h3>Delivery Info</h3>
+      <div id="userInfo">Loading...</div>
+    </div>
+
+    <div class="section cart-summary">
+      <h3>Order Summary</h3>
+      <div id="cartItems"></div>
+      <div class="total" id="deliveryOption"></div>
+      <div class="total" id="grandTotal"></div>
+    </div>
+
+    <button onclick="submitOrder()">Confirm Order</button>
+  </div>
+
+  <script>
+    const email = localStorage.getItem("userEmail");
+    let shippingFee = 0;
+    let deliveryMethod = "";
+
+    if (!email) {
+      alert("You must be logged in to proceed to checkout.");
+      window.location.href = "login.html";
+    }
+
+    async function fetchUserDetails() {
+      try {
+        const baseURL = window.location.origin.includes("localhost")
+          ? "http://localhost:3000"
+          : window.location.origin;
+
+        const res = await fetch(`${baseURL}/user-details?email=${email}`);
+        const user = await res.json();
+
+        // Determine delivery method and fee
+        const state = user.state?.toLowerCase() || "";
+        const near = ['abia', 'enugu', 'anambra', 'imo'];
+        const mid = ['rivers', 'delta', 'akwa ibom', 'cross river'];
+        const far = ['lagos', 'abuja', 'kaduna', 'kano', 'oyo', 'ogun'];
+
+        if (state === 'ebonyi') {
+          deliveryMethod = "Pickup Point within Ebonyi State";
+          shippingFee = 0;
+        } else if (near.includes(state)) {
+          deliveryMethod = "Waybill - Nearby State";
+          shippingFee = 2000;
+        } else if (mid.includes(state)) {
+          deliveryMethod = "Waybill - Mid-range State";
+          shippingFee = 3000;
+        } else if (far.includes(state)) {
+          deliveryMethod = "Waybill - Distant State";
+          shippingFee = 4000;
+        } else {
+          deliveryMethod = "Waybill - Default Rate";
+          shippingFee = 4500;
+        }
+
+        document.getElementById("userInfo").innerHTML = `
+          <div class="detail-item"><strong>Name:</strong> ${user.full_name}</div>
+          <div class="detail-item"><strong>Email:</strong> ${user.email}</div>
+          <div class="detail-item"><strong>Phone:</strong> ${user.phone}</div>
+          <div class="detail-item"><strong>Address:</strong> ${user.address}, ${user.city}, ${user.state}, ${user.country}</div>
+        `;
+
+        loadCartSummary();
+      } catch (err) {
+        document.getElementById("userInfo").innerHTML = "<p style='color:red;'>Failed to load user details.</p>";
+      }
+    }
+
+    function loadCartSummary() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsDiv = document.getElementById("cartItems");
+      const grandTotalDiv = document.getElementById("grandTotal");
+      const deliveryDiv = document.getElementById("deliveryOption");
+
+      let cartTotal = 0;
+      cartItemsDiv.innerHTML = "";
+
+      cart.forEach(item => {
+        const total = item.price * item.quantity;
+        cartTotal += total;
+
+        const row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML = `
+          <span>${item.name} (x${item.quantity})</span>
+          <span>₦${total.toLocaleString()}</span>
+        `;
+        cartItemsDiv.appendChild(row);
+      });
+
+      deliveryDiv.textContent = `Delivery Method: ${deliveryMethod} (₦${shippingFee.toLocaleString()})`;
+      const finalTotal = cartTotal + shippingFee;
+      grandTotalDiv.textContent = `Grand Total: ₦${finalTotal.toLocaleString()}`;
+    }
+
+    function submitOrder() {
+      alert("Order placed successfully! (Simulated)");
+      localStorage.removeItem("cart");
+      window.location.href = "main-page.html";
+    }
+
+    // Initialize
+    fetchUserDetails();
+  </script>
+</body>
+
+</body>
+</html>

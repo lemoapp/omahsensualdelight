@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 30px;
+    }
+    .cart-container {
+      max-width: 900px;
+      margin: auto;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 15px;
+    }
+    .cart-item img {
+      width: 100px;
+      height: auto;
+      margin-right: 20px;
+    }
+    .cart-details {
+      flex: 1;
+    }
+    .cart-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .total {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 30px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #1E88E5;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin-top: 5px;
+      border-radius: 6px;
+    }
+    button.remove {
+      background-color: crimson;
+    }
+    button.clear {
+      background-color: #555;
+    }
+    .cart-details button {
+      padding: 4px 10px;
+      font-size: 16px;
+      background-color: #ddd;
+      color: #333;
+      border: none;
+      margin: 0 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .cart-details button:hover {
+      background-color: #bbb;
+    }
+    .action-buttons {
+      text-align: right;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cart-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="total" id="cart-total"></div>
+    <div class="action-buttons">
+      <button class="clear" onclick="clearCart()">Clear Cart</button>
+      <button onclick="handleCheckout()">Checkout</button>
+    </div>
+  </div>
+
+  <script>
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItemsContainer = document.getElementById("cart-items");
+      const totalDisplay = document.getElementById("cart-total");
+      cartItemsContainer.innerHTML = "";
+      let grandTotal = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+        totalDisplay.textContent = "";
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const total = item.price * item.quantity;
+        grandTotal += total;
+
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "cart-item";
+        itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-details">
+            <div><strong>${item.name}</strong></div>
+            <div>₦${item.price.toLocaleString()}</div>
+            <div>
+              Quantity: 
+              <button onclick="changeQty(${index}, -1)">−</button>
+              <span style="margin: 0 10px;">${item.quantity}</span>
+              <button onclick="changeQty(${index}, 1)">+</button>
+            </div>
+            <div>Total: ₦${(item.price * item.quantity).toLocaleString()}</div>
+          </div>
+          <div class="cart-actions">
+            <button class="remove" onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(itemDiv);
+      });
+
+      totalDisplay.textContent = `Grand Total: ₦${grandTotal.toLocaleString()}`;
+    }
+
+    function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    function changeQty(index, delta) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (!cart[index]) return;
+
+      cart[index].quantity += delta;
+
+      if (cart[index].quantity < 1) {
+        if (confirm("Quantity is 0. Remove this item from cart?")) {
+          cart.splice(index, 1);
+        } else {
+          cart[index].quantity = 1;
+        }
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCart();
+    }
+
+    function clearCart() {
+      if (confirm("Are you sure you want to clear the cart?")) {
+        localStorage.removeItem("cart");
+        loadCart();
+      }
+    }
+
+    function handleCheckout() {
+      const userEmail = localStorage.getItem("userEmail");
+      if (!userEmail) {
+        alert("Please log in before proceeding to checkout.");
+        window.location.href = "login.html";
+      } else {
+        window.location.href = "checkout.html";
+      }
+    }
+
+    // Load cart on page load
+    loadCart();
+  </script>
+</body>
+</html>

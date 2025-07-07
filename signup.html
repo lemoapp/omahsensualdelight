@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup - Mini Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .signup-container {
+      width: 100%;
+      max-width: 420px;
+      padding: 30px;
+      background-color: #ffe4ec;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      max-height: 95vh;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #d63384;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #d63384;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background-color: #c2186b;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #d63384;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <input type="text" name="full_name" placeholder="Full Name" required>
+      <input type="email" name="email" placeholder="Email Address" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="text" name="phone" placeholder="Phone Number" required>
+      <input type="text" name="address" placeholder="Street Address" required>
+      <input type="text" name="city" placeholder="City" required>
+      <input type="text" name="state" placeholder="State" required>
+      <input type="text" name="country" placeholder="Country" required>
+
+      <button type="submit">Sign Up</button>
+      <div class="error" id="errorMsg"></div>
+    </form>
+    <div class="link">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('signupForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+  const res = await fetch(`${window.location.origin}/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+
+        const result = await res.json();
+        if (res.status === 201) {
+          window.location.href = 'login.html';
+        } else {
+          errorMsg.textContent = result.message || 'Signup failed';
+        }
+      } catch (err) {
+        errorMsg.textContent = 'Error connecting to server';
+      }
+    });
+  </script>
+</body>
+</html>
