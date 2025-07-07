@@ -22,7 +22,7 @@
        <div class="tabs" id="product-container"></div>
 
     </div>
-
+<!-- <div style="color: rgb(245, 86, 112);"></div> -->
 
 
 <script>
@@ -79,7 +79,7 @@
         <div class="text">
           <div class="name">${product.name}</div>
           <div class="price">₦ ${product.price.toLocaleString()}</div>
-          <button onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+          <button onclick='addToCart(${JSON.stringify(product)})' style="margin-left: 2rem; background-color: rgb(245, 86, 112); color: white; font-weight: bold; padding: 0.4rem 0.5rem; border: none; border-radius: 5px; margin-buttom: 10px;">Add to Cart</button>
         </div>
       `;
       container.appendChild(tab);
