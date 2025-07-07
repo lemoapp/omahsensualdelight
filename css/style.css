@@ -40,6 +40,28 @@ nav{
 
 .floater img{
     width: 60px;
+    
+}
+
+.floater2{
+    display: absolute;
+    margin-left: 80%;
+    margin-top: 58vh;
+    position: fixed;
+    background-color: rgb(245, 86, 112);
+    border-radius: 10rem;
+    font-size: 12px;
+}
+
+.floater2 p{
+    margin-left: 1rem;
+    font-weight: bold;
+}
+
+.floater2 img{
+    width: 60px;
+    border-radius: 10rem;
+    margin-top: 5px;
 }
 
 .content{
