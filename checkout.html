@@ -99,50 +99,50 @@
       window.location.href = "login.html";
     }
 
-    async function fetchUserDetails() {
-      try {
-        const baseURL = window.location.origin.includes("localhost")
-          ? "http://localhost:3000"
-          : window.location.origin;
+   async function fetchUserDetails() {
+  try {
+    const baseURL = window.location.origin.includes("localhost")
+      ? "http://localhost:3000"
+      : window.location.origin;
 
-        const res = await fetch(`${baseURL}/user-details?email=${email}`);
-        const user = await res.json();
+    const res = await fetch(`${baseURL}/user-details?email=${email}`);
+    const user = await res.json();
 
-        // Determine delivery method and fee
-        const state = user.state?.toLowerCase() || "";
-        const near = ['abia', 'enugu', 'anambra', 'imo'];
-        const mid = ['rivers', 'delta', 'akwa ibom', 'cross river'];
-        const far = ['lagos', 'abuja', 'kaduna', 'kano', 'oyo', 'ogun'];
+    // Normalize state input
+    const state = (user.state || "").trim().toLowerCase();
+    const near = ['abia', 'enugu', 'anambra', 'imo'];
+    const mid = ['rivers', 'delta', 'akwa ibom', 'cross river'];
+    const far = ['lagos', 'abuja', 'kaduna', 'kano', 'oyo', 'ogun'];
 
-        if (state === 'ebonyi') {
-          deliveryMethod = "Pickup Point within Ebonyi State";
-          shippingFee = 0;
-        } else if (near.includes(state)) {
-          deliveryMethod = "Waybill - Nearby State";
-          shippingFee = 2000;
-        } else if (mid.includes(state)) {
-          deliveryMethod = "Waybill - Mid-range State";
-          shippingFee = 3000;
-        } else if (far.includes(state)) {
-          deliveryMethod = "Waybill - Distant State";
-          shippingFee = 4000;
-        } else {
-          deliveryMethod = "Waybill - Default Rate";
-          shippingFee = 4500;
-        }
-
-        document.getElementById("userInfo").innerHTML = `
-          <div class="detail-item"><strong>Name:</strong> ${user.full_name}</div>
-          <div class="detail-item"><strong>Email:</strong> ${user.email}</div>
-          <div class="detail-item"><strong>Phone:</strong> ${user.phone}</div>
-          <div class="detail-item"><strong>Address:</strong> ${user.address}, ${user.city}, ${user.state}, ${user.country}</div>
-        `;
-
-        loadCartSummary();
-      } catch (err) {
-        document.getElementById("userInfo").innerHTML = "<p style='color:red;'>Failed to load user details.</p>";
-      }
+    if (state === 'ebonyi') {
+      deliveryMethod = "Pickup Point within Ebonyi State";
+      shippingFee = 0;
+    } else if (near.includes(state)) {
+      deliveryMethod = "Waybill - Nearby State";
+      shippingFee = 2000;
+    } else if (mid.includes(state)) {
+      deliveryMethod = "Waybill - Mid-range State";
+      shippingFee = 3000;
+    } else if (far.includes(state)) {
+      deliveryMethod = "Waybill - Distant State";
+      shippingFee = 4000;
+    } else {
+      deliveryMethod = "Waybill - Default Rate";
+      shippingFee = 4500;
     }
+
+    document.getElementById("userInfo").innerHTML = `
+      <div class="detail-item"><strong>Name:</strong> ${user.full_name}</div>
+      <div class="detail-item"><strong>Email:</strong> ${user.email}</div>
+      <div class="detail-item"><strong>Phone:</strong> ${user.phone}</div>
+      <div class="detail-item"><strong>Address:</strong> ${user.address}, ${user.city}, ${user.state}, ${user.country}</div>
+    `;
+
+    loadCartSummary();
+  } catch (err) {
+    document.getElementById("userInfo").innerHTML = "<p style='color:red;'>Failed to load user details.</p>";
+  }
+}
 
     function loadCartSummary() {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
