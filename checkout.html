@@ -66,6 +66,19 @@
       display: block;
       margin: 30px auto 0;
     }
+
+    .whatsapp-floater {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: inline-block;
+  }
+
+  .whatsapp-floater img {
+    width: 60px;
+    height: 60px;
+  }
   </style>
 </head>
 <body>
@@ -88,7 +101,9 @@
 
     <button onclick="submitOrder()">Confirm Order</button>
   </div>
-
+<a href="https://wa.me/2347057297158" target="_blank" class="whatsapp-floater">
+  <img src="./images/whatsapp.png" alt="WhatsApp" />
+</a>
   <script>
     const email = localStorage.getItem("userEmail");
     let shippingFee = 0;
@@ -172,10 +187,17 @@
     }
 
     function submitOrder() {
-      alert("Order placed successfully! (Simulated)");
-      localStorage.removeItem("cart");
-      window.location.href = "main-page.html";
-    }
+  const userConfirmed = confirm(
+    "IMPORTANT!\n\nBefore this page closes:\n\n1. Screenshot this checkout page showing your order and delivery details.\n2. Click the WhatsApp icon on the screen.\n3. Send the screenshot to our WhatsApp number.\n\nA support agent will attend to you shortly after."
+  );
+
+  if (userConfirmed) {
+    alert("Order placed successfully! (Simulated)");
+    // localStorage.removeItem("cart");
+    // window.location.href = "main-page.html";
+  }
+}
+
 
     // Initialize
     fetchUserDetails();
